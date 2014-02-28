@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,11 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.parse.ParseGeoPoint;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -92,20 +98,39 @@ public class MapViewFragment extends Fragment implements LocationListener,
     private LocationClient mLocationClient;
 
     // Fields for the map radius in feet
-    private float radius;
+    private float radius = 2000;
     private float lastRadius;
 
     // Represents the circle around a map
     private Circle mapCircle;
 
+    // Fields for helping process map and location changes
+    private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
+    private int mostRecentMapUpdate = 0;
+    private boolean hasSetUpInitialLocation = false;
     private Location mLastLocation = null;
     private Location mCurrentLocation = null;
+    private static View rootView;
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+
+
+        if (rootView != null) {
+            ViewGroup parent = (ViewGroup) rootView.getParent();
+            if (parent != null)
+                parent.removeView(rootView);
+        }
+        try {
+            rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+
+
+
 
         // Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
@@ -131,26 +156,25 @@ public class MapViewFragment extends Fragment implements LocationListener,
 
 
 
-        // LatLng myLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            return rootView;
+        }
 
-        // updateZoom(myLatLng);
-
-        mCurrentLocation = mMap.getMyLocation();
-
-
-
-        return rootView;
-    }
-
-    @Override
+        @Override
     public void onResume() {
         super.onResume();
 
 
 
-    }
+            if (mLastLocation != null) {
+                LatLng myLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
+                updateZoom(myLatLng);
 
+                updateCircle(myLatLng);
+
+            }
+
+        }
 
 
     // Fix the app crash when swipe through the tabs using MapViewFragment
@@ -158,12 +182,11 @@ public class MapViewFragment extends Fragment implements LocationListener,
     @Override
     public void onDestroyView() {
 
+
         super.onDestroyView();
-        
-        Fragment f = getFragmentManager().findFragmentById(R.id.mapView);
-        if (f != null) {
-            getFragmentManager().beginTransaction().remove(f).commit();
-        }
+
+
+
 
 
     }
@@ -176,8 +199,9 @@ public class MapViewFragment extends Fragment implements LocationListener,
         }
 
         // After disconnect() is called, the client is considered "dead".
-        mLocationClient.disconnect();
 
+
+        mLocationClient.disconnect();
         super.onStop();
     }
 
@@ -187,6 +211,9 @@ public class MapViewFragment extends Fragment implements LocationListener,
     @Override
     public void onStart() {
         super.onStart();
+
+        // Connect to the location services client
+        mLocationClient.connect();
 
 
     }
@@ -388,20 +415,28 @@ public class MapViewFragment extends Fragment implements LocationListener,
             // Get the current location
             return mLocationClient.getLastLocation();
         } else {
+
             return null;
         }
     }
 
-
-
     @Override
     public void onConnected(Bundle bundle) {
         if (TipketApplication.APPDEBUG) {
+
             Log.d("Connected to location services", TipketApplication.APPTAG);
         }
 
+        mCurrentLocation = getLocation();
         startPeriodicUpdates();
 
+    }
+
+    /*
+  * Helper method to get the Parse GEO point representation of a location
+  */
+    private ParseGeoPoint geoPointFromLocation(Location loc) {
+        return new ParseGeoPoint(loc.getLatitude(), loc.getLongitude());
     }
 
     @Override
@@ -411,8 +446,27 @@ public class MapViewFragment extends Fragment implements LocationListener,
 
     }
 
-    @Override
+    /*
+   * Report location updates to the UI.
+   */
     public void onLocationChanged(Location location) {
+        mCurrentLocation = location;
+        if (mLastLocation != null
+                && geoPointFromLocation(location)
+                .distanceInKilometersTo(geoPointFromLocation(mLastLocation)) < 0.01) {
+            // If the location hasn't changed by more than 10 meters, ignore it.
+            return;
+        }
+        mLastLocation = location;
+        LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        if (!hasSetUpInitialLocation) {
+            // Zoom to the current location.
+            updateZoom(myLatLng);
+            hasSetUpInitialLocation = true;
+        }
+        // Update map radius indicator
+        updateCircle(myLatLng);
+
 
     }
 
