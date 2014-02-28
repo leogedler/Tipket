@@ -141,7 +141,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     protected void onResume() {
 
-        Toast.makeText(this, "Welcome to Tipket!!", Toast.LENGTH_LONG).show();
+        // Welcome Message
+        Toast.makeText(this, R.string.welcome_message, Toast.LENGTH_LONG).show();
 
         super.onResume();
     }

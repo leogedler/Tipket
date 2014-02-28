@@ -110,6 +110,8 @@ public class MapViewFragment extends Fragment implements LocationListener,
     private boolean hasSetUpInitialLocation = false;
     private Location mLastLocation = null;
     private Location mCurrentLocation = null;
+
+    // Fragment View
     private static View rootView;
 
 
@@ -117,6 +119,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+      // Fix the app crash when swipe through the tabs using MapViewFragment
 
         if (rootView != null) {
             ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -128,9 +131,6 @@ public class MapViewFragment extends Fragment implements LocationListener,
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
         }
-
-
-
 
         // Create a new global location parameters object
         mLocationRequest = LocationRequest.create();
@@ -163,8 +163,6 @@ public class MapViewFragment extends Fragment implements LocationListener,
     public void onResume() {
         super.onResume();
 
-
-
             if (mLastLocation != null) {
                 LatLng myLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
@@ -176,20 +174,11 @@ public class MapViewFragment extends Fragment implements LocationListener,
 
         }
 
-
-    // Fix the app crash when swipe through the tabs using MapViewFragment
-
     @Override
     public void onDestroyView() {
-
-
         super.onDestroyView();
-
-
-
-
-
     }
+
 
     @Override
     public void onStop() {
