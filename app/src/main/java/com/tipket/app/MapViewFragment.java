@@ -22,15 +22,25 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -108,8 +118,11 @@ public class MapViewFragment extends Fragment implements LocationListener,
     private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
     private int mostRecentMapUpdate = 0;
     private boolean hasSetUpInitialLocation = false;
+    private String selectedObjectId;
     private Location mLastLocation = null;
     private Location mCurrentLocation = null;
+
+    protected List<ParseObject> mObject;
 
     // Fragment View
     private static View rootView;
@@ -150,10 +163,18 @@ public class MapViewFragment extends Fragment implements LocationListener,
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapView)).getMap();
 
+        getActivity().setProgressBarIndeterminateVisibility(true);
 
         // Enable the current location "blue dot"
         mMap.setMyLocationEnabled(true);
 
+        /* Set up the camera change handler */
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            public void onCameraChange(CameraPosition position) {
+                // When the camera changes, update the query
+                doMapQuery();
+            }
+        });
 
 
             return rootView;
@@ -167,6 +188,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
                 LatLng myLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
                 updateZoom(myLatLng);
+
 
                 updateCircle(myLatLng);
 
@@ -225,10 +247,13 @@ public class MapViewFragment extends Fragment implements LocationListener,
    * Zooms the map to show the area of interest based on the search radius
    */
     private void updateZoom(LatLng myLatLng) {
+
+
         // Get the bounds to zoom to
         LatLngBounds bounds = calculateBoundsWithCenter(myLatLng);
         // Zoom to the given bounds
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
+        getActivity().setProgressBarIndeterminateVisibility(false);
     }
 
     /*
@@ -462,6 +487,120 @@ public class MapViewFragment extends Fragment implements LocationListener,
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
+    }
+
+    /*
+   * Set up the query to update the map view
+    */
+        private void doMapQuery() {
+
+        final int myUpdateNumber = ++mostRecentMapUpdate;
+        Location myLoc = (mCurrentLocation == null) ? mLastLocation : mCurrentLocation;
+        // If location info isn't available, clean up any existing markers
+        if (myLoc == null) {
+            cleanUpMarkers(new HashSet<String>());
+            return;
+        }
+        final ParseGeoPoint myPoint = geoPointFromLocation(myLoc);
+        // Create the map Parse query
+        ParseQuery<ParseObject> mapQuery = new ParseQuery<ParseObject>(ParseConstants.CLASS_TIPS);
+        // Set up additional query filters
+        mapQuery.whereWithinKilometers(ParseConstants.KEY_MERCHANT_LOCATION, myPoint, MAX_POST_SEARCH_DISTANCE);
+
+        mapQuery.orderByDescending("createdAt");
+        mapQuery.setLimit(MAX_POST_SEARCH_RESULTS);
+        // Kick off the query in the background
+        mapQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e != null) {
+
+                    //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    if (TipketApplication.APPDEBUG) {
+                        Log.d(TipketApplication.APPTAG, "An error occurred while querying for map posts.", e);
+                    }
+                    return;
+                }
+        /*
+         * Make sure we're processing results from
+         * the most recent update, in case there
+         * may be more than one in progress.
+        */
+                if (myUpdateNumber != mostRecentMapUpdate) {
+                    return;
+                }
+                // Posts to show on the map
+                Set<String> toKeep = new HashSet<String>();
+                // Loop through the results of the search
+                for (ParseObject tips : objects) {
+
+                    // Add this post to the list of map pins to keep
+                    toKeep.add(tips.getObjectId());
+                    // Check for an existing marker for this post
+                    Marker oldMarker = mapMarkers.get(tips.getObjectId());
+                    // Set up the map marker's location
+                    MarkerOptions markerOpts =
+                            new MarkerOptions().position(new LatLng(tips.getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).getLatitude(), tips
+                                    .getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).getLongitude()));
+                    // Set up the marker properties based on if it is within the search radius
+                    if (tips.getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).distanceInKilometersTo(myPoint) > radius * METERS_PER_FEET
+                            / METERS_PER_KILOMETER) {
+                        // Check for an existing out of range marker
+                        if (oldMarker != null) {
+                            if (oldMarker.getSnippet() == null) {
+                                // Out of range marker already exists, skip adding it
+                                continue;
+                            } else {
+                                // Marker now out of range, needs to be refreshed
+                                oldMarker.remove();
+                            }
+                        }
+                        // Display a red marker with a predefined title and no snippet
+                        markerOpts =
+                                markerOpts.title(getResources().getString(R.string.post_out_of_range)).icon(
+                                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    } else {
+                        // Check for an existing in range marker
+                        if (oldMarker != null) {
+                            if (oldMarker.getSnippet() != null) {
+                                // In range marker already exists, skip adding it
+                                continue;
+                            } else {
+                                // Marker now in range, needs to be refreshed
+                                oldMarker.remove();
+                            }
+                        }
+                        // Display a green marker with the post information
+                        markerOpts =
+                                markerOpts.title(tips.getString(ParseConstants.KEY_PRODUCT_NAME)).snippet(tips.getString(ParseConstants.KEY_PRODUCT_PRICE))
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    }
+                    // Add a new marker
+                    Marker marker = mMap.addMarker(markerOpts);
+                    mapMarkers.put(tips.getObjectId(), marker);
+                    if (tips.getObjectId().equals(selectedObjectId)) {
+                        marker.showInfoWindow();
+                        selectedObjectId = null;
+                    }
+                }
+                // Clean up old markers.
+                cleanUpMarkers(toKeep);
+            }
+        });
+    }
+
+    /*
+  * Helper method to clean up old markers
+    */
+    private void cleanUpMarkers(Set<String> markersToKeep) {
+        for (String objId : new HashSet<String>(mapMarkers.keySet())) {
+            if (!markersToKeep.contains(objId)) {
+                Marker marker = mapMarkers.get(objId);
+                marker.remove();
+                mapMarkers.get(objId).remove();
+                mapMarkers.remove(objId);
+            }
+        }
     }
 
 
