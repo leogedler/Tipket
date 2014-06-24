@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.tipket.app.TipInPlaceActivity" >
+
+    <item android:id="@+id/user_profile"
+        android:title="@string/user_profile"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/user"/>
+
+    <item android:id="@+id/action_tip"
+        android:title="Tip"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/wish_selected"/>
+
+    <item android:id="@+id/action_search"
+        android:title="Search"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:icon="@drawable/search"/>
+</menu>

@@ -2,19 +2,182 @@
 <resources>
 
     <string name="app_name">Tipket</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+
+    <!-- Facebook app id Up and Strings -->
+    <string name="app_id">226992074170351</string>
+
+
+
+
+
+    <string name="post_done">Posted, Great!!</string>
+    <string name="invitation_complete">Invitation sent</string>
+    <string name="invitation_canceled">Invitation cancelled</string>
+    <string name="post_canceled">Publish cancelled</string>
+    <string name="error_post">Sorry there was an error</string>
+    <string name="invite_friend">Hi, try Tipket</string>
+    <string name="no_session_facebook_tittle">Oops!!</string>
+    <string name="no_session_facebook_message">You have to be signed up with facebook</string>
+    <string name="go_to_sign_up_with_facebook">Go</string>
+    <string name="cancel_facebook_action">Cancel</string>
+    <!-- End Facebook app id Up and Strings -->
+
+
+    <!-- Tab strings -->
+    <string name="title_section1">List</string>
+    <string name="title_section2">Map</string>
+    <string name="title_section3">Products</string>
+    <string name="title_section4">Users</string>
+    <!-- End of Tab strings -->
+
+
+    <!-- Dialog strings -->
+    <string name="loading_label">Loading...</string>
+    <string name="processing_label">Procession preview...</string>
+    <string name="yes_label">Yes</string>
+    <string name="no_label">No</string>
+    <string name="question_label">Are you posting in the place?</string>
+    <string name="merchant_dialog_tittle">Choose one place</string>
+    <string name="no_merchant_around_tittle">Add a new place</string>
+    <string name="no_merchant_around_message">There\'s not a registered place around you.</string>
+    <string name="not_listed">Not listed? Add it!</string>
+    <string name="add_no_place">Add it!</string>
+    <!-- End of Dialog strings -->
+
+
+    <!-- Login and Sign Up Strings -->
     <string name="action_settings">Settings</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="login_button_label">Login</string>
-    <string name="sign_up_text">Sign Up!</string>
-    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="sign_up_text">New user? Sign Up!</string>
     <string name="email_hint">email</string>
     <string name="sign_up_button_label">Sign Up</string>
     <string name="welcome_message">Welcome to Tipket</string>
-    <string name="title_activity_login">LoginActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="login_error_tittle">Oops!</string>
+    <string name="login_error_message">Please make sure that you enter your username and password!</string>
+    <string name="sign_up_error_message">Please make sure that you enter your username, password and email address!</string>
+    <string name="sign_up_error_tittle">Oops!</string>
+    <string name="empty_search_label">No new search!</string>
+    <string name="empty_map_label">No map to display!</string>
+    <string name="tip_button">Tip</string>
+    <string name="action_logOut">Log Out</string>
+    <string name="user_profile">Profile</string>
+    <string name="error_updating_user_info">Sorry, there was and error, please try again</string>
+    <!-- End of Login and Sign Up Strings -->
+
+
+    <!-- Tip a product Strings -->
+    <string name="productName_hint">Product Name</string>
+    <string name="merchantName_hint">Place Name</string>
+    <string name="price_hint">Price</string>
+    <string name="comment_hint">Comment</string>
+    <string name="tip_error_tittle">You forgot some information!</string>
+    <string name="tip_error_message">Please fill all the information or choose one place before send the post!</string>
+    <string name="tip_created">Tip Created!</string>
+    <string name="error_sending_tip">There was an error sending your post. Please try again.</string>
+    <string name="error_sending_tip_tittle">Oops!.</string>
+    <string name="post_out_of_range">Can\'t view post! Get closer.</string>
+    <string name="wait_for_location">"Please try again after your location appears on the map."</string>
+    <string name="error_external_storage">There was a problem accessing your device\'s external storage.</string>
+    <string name="video_file_size_warning">The selected video must be less than 10 MB.</string>
+    <string name="error_opening_file">There was a problem with the select file.</string>
+    <string name="error_file_size_too_large">The selected file is too large!, select a new file.</string>
+    <string name="general_error">Sorry there was an error!.</string>
+    <string name="tip_missingImage_tittle">Missing Picture!</string>
+    <string name="tip_missingImage_message">Please take a picture or select one from the gallery.</string>
+    <string name="added_to_list">Added to your list</string>
+    <string name="comment_label">Comments:</string>
+    <string name="city_address">City</string>
+    <string name="street_address">Street Address</string>
+    <string name="post_code">Post Code</string>
+    <string name="tip_missingAddress_tittle">Missing Address!</string>
+    <string name="tip_missingAddress_message">Please enter the city name and a valid street address.</string>
+    <string name="wish_already_taken">You already have this product</string>
+    <string name="product_removed">You removed this product</string>
+    <string name="sending_post">Sending your post...</string>
+    <string name="post_send">Post sent</string>
+    <string name="error_processing_the_image">Sorry, there was and error, please try again</string>
+
+    <string-array name="camera_choices">
+        <item>Take Picture</item>
+        <item>Choose Picture</item>
+    </string-array>
+    <!-- End of Tip a product Strings -->
+
+
+    <!-- Search Strings -->
+    <string name="search_hint">Search products...</string>
+    <string name="search_users_hint">Search users...</string>
+    <string name="empty_products_tittle">There aren\'t products to display.</string>
+    <string name="empty_products_message">Try again with a bigger search radius, with another product or be the first posting it!!</string>
+    <string name="search_radio_tittle">Searching Radius in Kilometres</string>
+    <string name="search_radius_message">You are Searching in a radius of:</string>
+    <string name="searching_in_location">You are Searching in Glasgow</string>
+    <string name="searching_for_label">You are Searching for:</string>
+    <string name="go_to_seach">Go to search</string>
+    <string name="go_to_post">Post it</string>
+    <string name="sort_by_date">Sort by date</string>
+    <string name="sort_by_most_wanted">Most wanted</string>
+    <!-- End of Search Strings -->
+
+
+    <!-- User Profile Strings -->
+    <string name="empty_user_products_label">Sorry, there are no Products to Display.</string>
+    <string name="following_added">Following...</string>
+    <string name="following_removed">Removed...</string>
+    <string name="no_user_followings_label">Don\'t have followings</string>
+    <string name="follow_button">Follow</string>
+    <string name="unfollow_button">Unfollow</string>
+    <string name="following_button">Following</string>
+    <string name="logout_button">Logout</string>
+    <string name="points">points</string>
+    <string name="no_user_found">Sorry there not user with that name.</string>
+    <!-- End of User Profile Strings -->
+
+
+    <!-- Layout Strings -->
+    <string name="posted_by_label">posted by:  </string>
+    <string name="share_by">Share it on:</string>
+    <!-- End of Layout Strings -->
+
+
+    <!-- Gamification Strings -->
+    <string name="win_points">You earned 1 point!!</string>
+    <!-- End of Gamification Strings -->
+
+
+    <!-- Titles Activities Strings -->
+    <string name="title_activity_search"></string>
+    <string name="title_activity_product_detail"></string>
+    <string name="title_activity_user_profile"></string>
+    <string name="title_activity_tip"></string>
+    <string name="title_activity_map_view"></string>
+    <string name="title_activity_sign_up"></string>
+    <string name="title_activity_login"></string>
+    <string name="title_activity_following"></string>
+    <string name="title_activity_tip_not_in_place"></string>
+    <string name="title_activity_merchant_profile"></string>
+    <string name="title_activity_pre_launch"></string>
+    <string name="title_activity_tutorial">TutorialActivity</string>
+    <!-- End of Titles Activities String -->
+
+
+    <!-- Error dialogs -->
+    <string name="error_merchant_profile">Ops! There was an error loading this profile, sorry!</string>
+    <string name="error_user_profile">Ops! There was an error loading this profile, sorry!</string>
+    <string name="error_feed">Ops! There was an error loading the feed, sorry!</string>
+    <string name="error_posting">Ops! There was an error sending the post, sorry!</string>
+    <string name="error_map_product">Ops! There was an error loading this product, sorry!</string>
+    <string name="go_to_feed">Go to feed</string>
+    <string name="try_again">Try again, please</string>
+    <string name="network_unavailable">Network is unavailable, try again later</string>
+    <string name="error_fetching_merchants_names">Oops! There was an error loading the places names</string>
+    <string name="add_place_name_manually">Add manually</string>
+    <!-- End of error dialogs -->
+
+
+
 
 </resources>

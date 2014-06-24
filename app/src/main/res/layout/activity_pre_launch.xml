@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tipket.app.PreLaunchActivity"
+    android:background="@drawable/first_page">
+
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:id="@+id/loginSignUpWithFacebook"
+        android:layout_above="@+id/loginImageButton"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/button_facebook"
+        android:layout_marginBottom="20dp"/>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:id="@+id/loginImageButton"
+        android:layout_above="@+id/signUpWithEmail"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/button_login"
+        android:layout_marginBottom="20dp"/>
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:id="@+id/signUpWithEmail"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/button_email"
+        android:layout_marginBottom="20dp"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tipketLogo"
+        android:src="@drawable/logo"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true" />
+
+<!--
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/firstPageContent"
+        android:layout_above="@+id/loginSignUpWithFacebook"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/first_page_content"/>-->
+
+
+</RelativeLayout>

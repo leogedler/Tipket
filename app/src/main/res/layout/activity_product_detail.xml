@@ -1,0 +1,252 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tipket.app.ProductDetail"
+    android:fillViewport="true"
+    android:background="#FFFFFF">
+
+
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/productNameDetail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="#484848"
+        android:textStyle="bold"
+        android:paddingLeft="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/postDateProductDetail"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:id="@+id/productDetailView"
+        android:scaleType="centerCrop"
+        android:layout_below="@+id/productNameDetail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/postedByLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/merchantNameLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:text="@string/posted_by_label"
+        android:textStyle="bold"
+        android:paddingTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="#484848" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/posterProfilePicture"
+        android:layout_below="@+id/postedByLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/posterUserView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:paddingTop="5dp"
+        android:textColor="#666673"
+        android:paddingLeft="0dp"
+        android:layout_below="@+id/posterProfilePicture"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_toLeftOf="@+id/mapView3"
+        android:textIsSelectable="false"
+        android:layout_marginBottom="45dp"
+        android:layout_marginLeft="10dp"/>
+
+    <TextView
+        android:id="@+id/merchantNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wishIco3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:textColor="#FCB646"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/mapView3" />
+
+    <TextView
+        android:id="@+id/commentsLabel"
+        android:text="@string/comment_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_below="@+id/separatorBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="#484848" />
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/commentsLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:textColor="#61616e"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:paddingRight="10dp"/>
+
+     <fragment
+        android:layout_width="150dp"
+        android:layout_height="140dp"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mapView3"
+        android:layout_above="@+id/separatorBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"/>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/wishIco3"
+        android:layout_below="@+id/productDetailView"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/wishIco4"
+        android:layout_alignTop="@id/wishIco3"
+        android:layout_alignEnd="@id/wishIco3"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/countOfWishes3"
+        android:layout_alignBottom="@+id/wishIco3"
+        android:layout_toRightOf="@+id/wishIco3"
+        android:textStyle="italic"
+        android:visibility="invisible"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#484848"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/countOfWishes4"
+        android:layout_alignBottom="@+id/wishIco3"
+        android:layout_toRightOf="@+id/wishIco3"
+        android:textStyle="italic"
+        android:visibility="invisible"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#484848"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/share_by"
+        android:id="@+id/shareLabel"
+        android:layout_below="@+id/comment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:paddingBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:textColor="#484848"/>
+
+
+    <ImageView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/facebook"
+        android:id="@+id/shareByFacebook"
+        android:layout_below="@+id/comment"
+        android:layout_toRightOf="@+id/shareLabel"
+        android:scaleType="fitXY"
+        android:paddingBottom="20dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/separatorBar"
+        android:layout_below="@+id/posterUserView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="#FCB646"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/postDateProductDetail"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/productDetailView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textStyle="italic"
+        android:textColor="#8d8d9a"
+        android:paddingTop="15dp"
+        android:layout_marginRight="20dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusBar2"
+        android:layout_alignTop="@+id/wishIco3"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/statusText2"
+            android:layout_below="@id/statusBar2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="1dp"
+            android:textStyle="italic"
+            android:textColor="#8d8d9a"
+            android:layout_marginRight="15dp"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+</ScrollView>
+

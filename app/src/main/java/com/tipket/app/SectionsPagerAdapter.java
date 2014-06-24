@@ -17,19 +17,28 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public SectionsPagerAdapter(MainActivity mainActivity, FragmentManager fm) {
         super(fm);
         this.mainActivity = mainActivity;
+
     }
 
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return MainActivity.PlaceholderFragment.newInstance(position + 1);
+
+        switch (position) {
+            case  0:
+                return new ProductsFragment();
+            case 1:
+                return new MapViewFragment();
+
+
+        }
+        return null;
     }
 
     @Override
     public int getCount() {
-        // Show 3 total pages.
-        return 3;
+        // Show 2 total pages.
+        return 2;
     }
 
     @Override
@@ -40,9 +49,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
                 return mainActivity.getString(R.string.title_section1).toUpperCase(l);
             case 1:
                 return mainActivity.getString(R.string.title_section2).toUpperCase(l);
-            case 2:
-                return mainActivity.getString(R.string.title_section3).toUpperCase(l);
+
         }
         return null;
     }
+
+
 }

@@ -1,0 +1,149 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context="com.tipket.app.TipInPlaceActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <fragment
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:id="@+id/mapView2"
+                android:layout_width="fill_parent"
+                android:layout_height="200dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="10dp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:id="@+id/merchantName"
+                android:hint="@string/merchantName_hint"
+                android:textColorHint="#FCB646"
+                android:layout_below="@+id/previewImage"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:imeOptions="actionNext"
+                android:visibility="invisible"
+                android:paddingTop="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_place"
+                android:id="@+id/listOfMerchantsNames"
+                android:layout_below="@+id/previewImage"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameOfMerchantSelected"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_below="@+id/previewImage"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="10dp"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_close"
+                android:id="@+id/eraseMerchantSelected"
+                android:layout_alignTop="@+id/listOfMerchantsNames"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:visibility="invisible"/>
+
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:id="@+id/productNameField"
+                android:hint="@string/productName_hint"
+                android:layout_below="@+id/merchantName"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/commentField"
+                android:hint="@string/comment_hint"
+                android:inputType="textCapSentences"
+                android:layout_below="@+id/productNameField"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:imeOptions="actionDone"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sedTip"
+                android:singleLine="true"
+                android:layout_below="@+id/commentField"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/add_wish"
+                android:layout_marginTop="20dp"/>
+
+
+            <ImageButton
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/cameraButton"
+                android:layout_below="@+id/mapView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/ic_action_camera"
+                android:layout_marginLeft="30dp"/>
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/previewImage"
+                android:scaleType="centerCrop"
+                android:layout_below="@+id/mapView2"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/eraseImage"
+                android:background="@drawable/search_close"
+                android:visibility="invisible"
+                android:layout_below="@+id/mapView2"
+                android:layout_alignRight="@+id/previewImage"
+                android:layout_marginLeft="20dp"/>
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</ScrollView>

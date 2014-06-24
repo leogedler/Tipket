@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+
+    <TextView
+        android:id="@+id/posterNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingTop="10dp"
+        android:textColor="#666673"
+        android:paddingLeft="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/userProfilePicture2"
+        android:textSize="15dp"/>
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/userProfilePicture2"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:scaleType="fitXY"/>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:id="@+id/productListView"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:scaleType="centerCrop"
+        android:layout_below="@+id/userProfilePicture2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/wishIco"
+        android:layout_below="@+id/productListView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/wishIco2"
+        android:layout_below="@+id/productListView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/productNameView"
+        android:layout_below="@+id/wishIco"
+        android:textAppearance="?android:attr/textAppearance"
+        android:paddingLeft="19dp"
+        android:textColor="#484848"
+        android:textStyle="bold"
+        android:textSize="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/merchantNameView"
+        android:layout_alignParentLeft="true"
+        android:textColor="#FCB646"
+        android:textStyle="bold"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:textSize="15dp"
+        android:layout_below="@+id/productNameView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/countOfWishes"
+        android:layout_alignBottom="@+id/wishIco"
+        android:layout_toRightOf="@+id/wishIco"
+        android:textStyle="italic"
+        android:layout_marginLeft="2dp"
+        android:visibility="invisible"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#666673"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/countOfWishes2"
+        android:layout_alignBottom="@+id/wishIco"
+        android:layout_toRightOf="@+id/wishIco"
+        android:textStyle="italic"
+        android:layout_marginLeft="2dp"
+        android:visibility="invisible"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:textColor="#666673"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar4"
+        android:layout_alignTop="@+id/productListView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/postDate"
+        android:layout_alignBottom="@+id/posterNameView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:textStyle="italic"
+        android:textColor="#8d8d9a"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/statusBar"
+        android:layout_alignTop="@+id/wishIco"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/statusText"
+        android:layout_below="@+id/statusBar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="1dp"
+        android:textStyle="italic"
+        android:textColor="#8d8d9a"/>
+
+
+</RelativeLayout>

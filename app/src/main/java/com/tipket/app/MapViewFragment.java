@@ -3,15 +3,20 @@ package com.tipket.app;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -32,10 +37,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.squareup.picasso.Picasso;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +60,8 @@ public class MapViewFragment extends Fragment implements LocationListener,
         GooglePlayServicesClient.OnConnectionFailedListener  {
 
     private GoogleMap mMap;
-    private MapFragment viewMap;
+
+    protected ProgressDialog progressDialog;
 
     /*
   * Define a request code to send to Google Play services This code is returned in
@@ -82,8 +92,8 @@ public class MapViewFragment extends Fragment implements LocationListener,
     /*
      * Constants for handling location results
      */
-    // Conversion from feet to meters
-    private static final float METERS_PER_FEET = 0.3048f;
+    // Conversion from kilometres to meters
+    private static final int KILOMETRES_TO_METRES = 1000;
 
     // Conversion from kilometers to meters
     private static final int METERS_PER_KILOMETER = 1000;
@@ -95,10 +105,10 @@ public class MapViewFragment extends Fragment implements LocationListener,
     private static final float OFFSET_CALCULATION_ACCURACY = 0.01f;
 
     // Maximum results returned from a Parse query
-    private static final int MAX_POST_SEARCH_RESULTS = 20;
+    private static final int MAX_POST_SEARCH_RESULTS = 50;
 
     // Maximum post search radius for map in kilometers
-    private static final int MAX_POST_SEARCH_DISTANCE = 100;
+    private static final int MAX_SEARCH_DISTANCE = 1000;
 
 
     // A request to connect to Location Services
@@ -108,7 +118,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
     private LocationClient mLocationClient;
 
     // Fields for the map radius in feet
-    private float radius = 2000;
+    private int mRadius;
     private float lastRadius;
 
     // Represents the circle around a map
@@ -116,21 +126,27 @@ public class MapViewFragment extends Fragment implements LocationListener,
 
     // Fields for helping process map and location changes
     private final Map<String, Marker> mapMarkers = new HashMap<String, Marker>();
+    private final Map<Marker, ParseObject> mapClickMarker = new HashMap<Marker, ParseObject>();
     private int mostRecentMapUpdate = 0;
     private boolean hasSetUpInitialLocation = false;
     private String selectedObjectId;
     private Location mLastLocation = null;
     private Location mCurrentLocation = null;
 
-    protected List<ParseObject> mObject;
-
     // Fragment View
     private static View rootView;
 
+    // Global varible for Search
+    private String mSearchText;
+    private boolean mFilterStatus;
+    protected boolean mFilterByDate;
+    protected boolean mFilterByTrendy;
 
+    protected boolean mViewStop = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
 
       // Fix the app crash when swipe through the tabs using MapViewFragment
 
@@ -142,7 +158,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
         try {
             rootView = inflater.inflate(R.layout.fragment_map, container, false);
         } catch (InflateException e) {
-        /* map is already there, just return view as it is */
+
         }
 
         // Create a new global location parameters object
@@ -163,7 +179,6 @@ public class MapViewFragment extends Fragment implements LocationListener,
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.mapView)).getMap();
 
-        getActivity().setProgressBarIndeterminateVisibility(true);
 
         // Enable the current location "blue dot"
         mMap.setMyLocationEnabled(true);
@@ -175,25 +190,29 @@ public class MapViewFragment extends Fragment implements LocationListener,
                 doMapQuery();
             }
         });
-
-
             return rootView;
         }
 
-        @Override
+
+    @Override
     public void onResume() {
         super.onResume();
+
+        mRadius = ((MainActivity) getActivity()).getKilometres();
+        mFilterStatus = ((MainActivity) getActivity()).getFilterStatus();
+        mFilterByDate = ((MainActivity) getActivity()).getSortByDate();
+        mFilterByTrendy = ((MainActivity) getActivity()).getSortByTrendy();
 
             if (mLastLocation != null) {
                 LatLng myLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
                 updateZoom(myLatLng);
 
-
-                updateCircle(myLatLng);
+                if (mFilterStatus == true) {
+                    updateCircle(myLatLng);
+                }
 
             }
-
         }
 
     @Override
@@ -210,10 +229,10 @@ public class MapViewFragment extends Fragment implements LocationListener,
         }
 
         // After disconnect() is called, the client is considered "dead".
-
-
         mLocationClient.disconnect();
         super.onStop();
+
+        mViewStop = true;
     }
 
     /*
@@ -223,10 +242,10 @@ public class MapViewFragment extends Fragment implements LocationListener,
     public void onStart() {
         super.onStart();
 
+        mViewStop = false;
+
         // Connect to the location services client
         mLocationClient.connect();
-
-
     }
 
     /*
@@ -248,12 +267,11 @@ public class MapViewFragment extends Fragment implements LocationListener,
    */
     private void updateZoom(LatLng myLatLng) {
 
-
         // Get the bounds to zoom to
         LatLngBounds bounds = calculateBoundsWithCenter(myLatLng);
         // Zoom to the given bounds
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 5));
-        getActivity().setProgressBarIndeterminateVisibility(false);
+
     }
 
     /*
@@ -289,7 +307,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
         // The return offset, initialized to the default difference
         double latLngOffset = OFFSET_CALCULATION_INIT_DIFF;
         // Set up the desired offset distance in meters
-        float desiredOffsetInMeters = radius * METERS_PER_FEET;
+        float desiredOffsetInMeters = mRadius * KILOMETRES_TO_METRES;
         // Variables for the distance calculation
         float[] distance = new float[1];
         boolean foundMax = false;
@@ -336,7 +354,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
         if (mapCircle == null) {
             mapCircle =
                     mMap.addCircle(
-                            new CircleOptions().center(myLatLng).radius(radius * METERS_PER_FEET));
+                            new CircleOptions().center(myLatLng).radius(mRadius * KILOMETRES_TO_METRES));
             int baseColor = Color.DKGRAY;
             mapCircle.setStrokeColor(baseColor);
             mapCircle.setStrokeWidth(2);
@@ -344,7 +362,7 @@ public class MapViewFragment extends Fragment implements LocationListener,
                     Color.blue(baseColor)));
         }
         mapCircle.setCenter(myLatLng);
-        mapCircle.setRadius(radius * METERS_PER_FEET); // Convert radius in feet to meters.
+        mapCircle.setRadius(mRadius * KILOMETRES_TO_METRES); // Convert radius in feet to meters.
     }
 
     /*
@@ -414,8 +432,6 @@ public class MapViewFragment extends Fragment implements LocationListener,
             // Display an error dialog
 
 
-
-
             return false;
         }
     }
@@ -467,20 +483,24 @@ public class MapViewFragment extends Fragment implements LocationListener,
         mCurrentLocation = location;
         if (mLastLocation != null
                 && geoPointFromLocation(location)
-                .distanceInKilometersTo(geoPointFromLocation(mLastLocation)) < 0.01) {
-            // If the location hasn't changed by more than 10 meters, ignore it.
+                .distanceInKilometersTo(geoPointFromLocation(mLastLocation)) < 0.05) {
+            // If the location hasn't changed by more than 50 meters, ignore it.
             return;
-        }
-        mLastLocation = location;
-        LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        if (!hasSetUpInitialLocation) {
-            // Zoom to the current location.
-            updateZoom(myLatLng);
-            hasSetUpInitialLocation = true;
-        }
-        // Update map radius indicator
-        updateCircle(myLatLng);
+        }else {
+            mLastLocation = location;
+            LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+            if (!hasSetUpInitialLocation) {
+                // Zoom to the current location.
+                updateZoom(myLatLng);
+                hasSetUpInitialLocation = true;
+            }
+            // Update map radius indicator
+            if (mFilterStatus == true) {
+                updateCircle(myLatLng);
+            }
 
+            doMapQuery();
+        }
 
     }
 
@@ -502,12 +522,32 @@ public class MapViewFragment extends Fragment implements LocationListener,
             return;
         }
         final ParseGeoPoint myPoint = geoPointFromLocation(myLoc);
+        mSearchText = ((MainActivity) getActivity()).getSearch();
         // Create the map Parse query
         ParseQuery<ParseObject> mapQuery = new ParseQuery<ParseObject>(ParseConstants.CLASS_TIPS);
-        // Set up additional query filters
-        mapQuery.whereWithinKilometers(ParseConstants.KEY_MERCHANT_LOCATION, myPoint, MAX_POST_SEARCH_DISTANCE);
 
-        mapQuery.orderByDescending("createdAt");
+        // Set up additional query filters
+        if (mSearchText != null) {
+             // Filter Search
+            mapQuery.whereContains(ParseConstants.KEY_PRODUCT_NAME, mSearchText);
+         }
+
+        if (mFilterStatus == true) {
+
+            mapQuery.whereWithinKilometers(ParseConstants.KEY_MERCHANT_LOCATION, myPoint, mRadius);
+        }
+        else {
+            mapQuery.whereWithinKilometers(ParseConstants.KEY_MERCHANT_LOCATION, myPoint, MAX_SEARCH_DISTANCE);
+        }
+
+        if (mFilterByDate == true) {
+            mapQuery.orderByDescending("createdAt");
+        }
+
+        if (mFilterByTrendy == true){
+            mapQuery.orderByDescending(ParseConstants.KEY_WISHES_COUNT);
+        }
+
         mapQuery.setLimit(MAX_POST_SEARCH_RESULTS);
         // Kick off the query in the background
         mapQuery.findInBackground(new FindCallback<ParseObject>() {
@@ -515,7 +555,6 @@ public class MapViewFragment extends Fragment implements LocationListener,
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e != null) {
 
-                    //Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                     if (TipketApplication.APPDEBUG) {
                         Log.d(TipketApplication.APPTAG, "An error occurred while querying for map posts.", e);
                     }
@@ -532,34 +571,59 @@ public class MapViewFragment extends Fragment implements LocationListener,
                 // Posts to show on the map
                 Set<String> toKeep = new HashSet<String>();
                 // Loop through the results of the search
-                for (ParseObject tips : objects) {
+                for (final ParseObject tips : objects) {
 
-                    // Add this post to the list of map pins to keep
+                    // Add this tip_in_place to the list of map pins to keep
                     toKeep.add(tips.getObjectId());
                     // Check for an existing marker for this post
-                    Marker oldMarker = mapMarkers.get(tips.getObjectId());
+                    final Marker oldMarker = mapMarkers.get(tips.getObjectId());
                     // Set up the map marker's location
                     MarkerOptions markerOpts =
                             new MarkerOptions().position(new LatLng(tips.getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).getLatitude(), tips
                                     .getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).getLongitude()));
-                    // Set up the marker properties based on if it is within the search radius
-                    if (tips.getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).distanceInKilometersTo(myPoint) > radius * METERS_PER_FEET
-                            / METERS_PER_KILOMETER) {
-                        // Check for an existing out of range marker
-                        if (oldMarker != null) {
-                            if (oldMarker.getSnippet() == null) {
-                                // Out of range marker already exists, skip adding it
-                                continue;
-                            } else {
-                                // Marker now out of range, needs to be refreshed
-                                oldMarker.remove();
+
+                    // Checking for distance filter
+                    if (mFilterStatus == true) {
+
+                        // Set up the marker properties based on if it is within the search radius
+                        if (tips.getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION).distanceInKilometersTo(myPoint) > mRadius * KILOMETRES_TO_METRES
+                                / METERS_PER_KILOMETER) {
+                            // Check for an existing out of range marker
+                            if (oldMarker != null) {
+                                if (oldMarker.getSnippet() == null) {
+                                    // Out of range marker already exists, skip adding it
+                                    continue;
+                                } else {
+                                    // Marker now out of range, needs to be refreshed
+                                    oldMarker.remove();
+                                }
                             }
-                        }
+                        /*
                         // Display a red marker with a predefined title and no snippet
                         markerOpts =
-                                markerOpts.title(getResources().getString(R.string.post_out_of_range)).icon(
-                                        BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    } else {
+                                markerOpts.title(tips.getString(ParseConstants.KEY_PRODUCT_NAME))
+                                        .snippet(tips.getString(ParseConstants.KEY_MERCHANT_NAME))
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));*/
+                        } else {
+                            // Check for an existing in range marker
+                            if (oldMarker != null) {
+                                if (oldMarker.getSnippet() != null) {
+                                    // In range marker already exists, skip adding it
+                                    continue;
+                                } else {
+                                    // Marker now in range, needs to be refreshed
+                                    oldMarker.remove();
+                                }
+                            }
+                            // Display a green marker with the post information
+                            markerOpts =
+                                    markerOpts.title(StringHelper.capitalize(tips.getString(ParseConstants.KEY_PRODUCT_NAME)))
+                                            .snippet(StringHelper.capitalize(tips.getString(ParseConstants.KEY_MERCHANT_NAME)))
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin));
+
+                        }
+                    }
+                    else {
                         // Check for an existing in range marker
                         if (oldMarker != null) {
                             if (oldMarker.getSnippet() != null) {
@@ -572,16 +636,90 @@ public class MapViewFragment extends Fragment implements LocationListener,
                         }
                         // Display a green marker with the post information
                         markerOpts =
-                                markerOpts.title(tips.getString(ParseConstants.KEY_PRODUCT_NAME)).snippet(tips.getString(ParseConstants.KEY_PRODUCT_PRICE))
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                                markerOpts.title(StringHelper.capitalize(tips.getString(ParseConstants.KEY_PRODUCT_NAME)))
+                                        .snippet(StringHelper.capitalize(tips.getString(ParseConstants.KEY_MERCHANT_NAME)))
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin));
+
                     }
+
                     // Add a new marker
                     Marker marker = mMap.addMarker(markerOpts);
                     mapMarkers.put(tips.getObjectId(), marker);
+                    mapClickMarker.put(marker, tips);
+
                     if (tips.getObjectId().equals(selectedObjectId)) {
                         marker.showInfoWindow();
+
                         selectedObjectId = null;
+
                     }
+
+                    if (mViewStop == false) {
+
+                        mMap.setInfoWindowAdapter(new CustomWindowAdapter(getActivity().getLayoutInflater(), mapClickMarker, getActivity()));
+                        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                            @Override
+                            public boolean onMarkerClick(final Marker marker) {
+
+                                marker.showInfoWindow();
+
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        marker.showInfoWindow();
+
+                                    }
+                                }, 700);
+
+                                return true;
+                            }
+                        });
+
+                        //Click on info window in a market
+                        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            @Override
+                            public void onInfoWindowClick(Marker marker) {
+
+                                ParseObject tipObject = mapClickMarker.get(marker);
+
+                                String productName = tipObject.getString(ParseConstants.KEY_PRODUCT_NAME);
+                                String merchantName = tipObject.getString(ParseConstants.KEY_MERCHANT_NAME);
+                                String productId = tipObject.getObjectId();
+                                String senderName = tipObject.getString(ParseConstants.KEY_SENDER_NAME);
+                                String senderId = tipObject.getString(ParseConstants.KEY_SENDER_ID);
+                                String comment = tipObject.getString(ParseConstants.KEY_PRODUCT_COMMENT);
+                                String senderFacebookId = tipObject.getString(ParseConstants.KEY_FACEBOOK_SENDER_ID);
+                                ParseGeoPoint merchantLocation = tipObject.getParseGeoPoint(ParseConstants.KEY_MERCHANT_LOCATION);
+                                double merchantLatitude = merchantLocation.getLatitude();
+                                double merchantLongitude = merchantLocation.getLongitude();
+                                int wishCounter = tipObject.getInt(ParseConstants.KEY_WISHES_COUNT);
+                                Format dateFormat = new SimpleDateFormat("dd MMM");
+
+                                ParseFile file = tipObject.getParseFile(ParseConstants.KEY_FILE);
+                                String imageUrl = file.getUrl();
+
+                                Intent intent = new Intent(getActivity(), ProductDetail.class);
+                                intent.putExtra("productName", productName);
+                                intent.putExtra("merchantName", merchantName);
+                                intent.putExtra("senderName", senderName);
+                                intent.putExtra("senderId", senderId);
+                                intent.putExtra("wishCounter", wishCounter);
+                                intent.putExtra("productId", productId);
+                                intent.putExtra("imageUrl", imageUrl);
+                                intent.putExtra("comment", comment);
+                                intent.putExtra("senderFacebookId", senderFacebookId);
+                                intent.putExtra("merchantLatitude", merchantLatitude);
+                                intent.putExtra("merchantLongitude", merchantLongitude);
+                                intent.putExtra("postDate", dateFormat.format(tipObject.getCreatedAt()));
+                                startActivity(intent);
+                            }
+
+
+                        });
+                    }
+
+
                 }
                 // Clean up old markers.
                 cleanUpMarkers(toKeep);
@@ -604,5 +742,38 @@ public class MapViewFragment extends Fragment implements LocationListener,
     }
 
 
+}
+
+class CustomWindowAdapter implements GoogleMap.InfoWindowAdapter {
+    LayoutInflater mInflater;
+    Map<Marker, ParseObject> imageStringMapMarker;
+    Context context;
+
+    public CustomWindowAdapter(LayoutInflater i,  Map<Marker, ParseObject> imageStringMapMarker2, Context context ){
+        mInflater = i;
+        imageStringMapMarker = imageStringMapMarker2;
+    }
+
+    @Override
+    public View getInfoContents(final Marker marker) {
+
+        View v = mInflater.inflate(R.layout.map_general_info, null);
+
+        ImageView ivThumbnail = (ImageView) v.findViewById(R.id.mapPreviewImage);
+        ParseObject mapMarker = imageStringMapMarker.get(marker);
+
+        ParseFile file = mapMarker.getParseFile(ParseConstants.KEY_FILE);
+
+        Picasso.with(context).load(Uri.parse(file.getUrl())).placeholder(R.drawable.loading).into(ivThumbnail);
+
+        return v;
+
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
 

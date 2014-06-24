@@ -1,0 +1,118 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tipket.app.MerchantProfile">
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="140dp">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/merchantHeaderName"
+                android:layout_alignTop="@+id/imageShop"
+                android:layout_toRightOf="@+id/imageShop"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="30dp"
+                android:layout_toLeftOf="@+id/mapView6"
+                android:paddingRight="20dp"
+                android:textColor="#484848"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageShop"
+                android:background="@drawable/shop"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/separatorBar"
+                android:background="#FCB646"
+                android:layout_below="@+id/mapView6"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <fragment
+                android:layout_width="100dp"
+                android:layout_height="95dp"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:id="@+id/mapView6"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="2dp"/>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/separatorBar2"
+                android:background="#FCB646"
+                android:layout_below="@+id/separatorBar"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="40dp"/>
+
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/galleryMerchantSelected"
+                android:src="@drawable/gallery_selected"
+                android:visibility="visible"
+                android:layout_alignBottom="@+id/listMerchantUnSelected"
+                android:layout_toRightOf="@+id/imageShop"
+                android:clickable="false" />
+
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listMerchantUnSelected"
+                android:src="@drawable/list"
+                android:longClickable="true"
+                android:visibility="visible"
+                android:layout_below="@+id/separatorBar"
+                android:layout_toLeftOf="@+id/mapView6"
+                android:layout_marginTop="10dp"/>
+
+         </RelativeLayout>
+
+
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/gridView2"
+        android:numColumns="3"
+        android:columnWidth="50dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        </GridView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

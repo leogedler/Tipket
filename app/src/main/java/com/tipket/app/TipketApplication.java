@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
+import com.parse.PushService;
 
 /**
  * Created by leonardogedler on 24/02/2014.
@@ -25,6 +27,13 @@ public class TipketApplication extends Application{
     public void onCreate() {
         Parse.initialize(this, "jI2MqfWiM1zAhYKEeOXOer2Zx0mdrSQnYPzSjuSS", "JghfqCw53l8cGnvqJEB57QIahWcplMfAo1ALOXlQ");
         preferences = getSharedPreferences("com.tipket.app", Context.MODE_PRIVATE);
+
+        ParseFacebookUtils.initialize(getString(R.string.app_id));
+
+        PushService.setDefaultPushCallback(this, DispatchActivity.class);
+
+
+
     }
 
     public static float getSearchDistance() {
