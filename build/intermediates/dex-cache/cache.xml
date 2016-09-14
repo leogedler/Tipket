@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/picasso-2.2.0-d1be34fee90b565c7ba82215b6efaa3cb15f9544.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/libs/picasso-2.2.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="74137f8d9aac26dd9463efe32271f2be8d41cda9"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/classes-b94cd1aa5feff3bafb94bf7088d0cc9a29c1926b.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e128103d5281ddd26195a7f980b36d0d005a4e56"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/classes-d25b14a6f135ce4b9fcd5cf54437a3b7f79b17f6.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0-rc1/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="7ae84435ebc95f67a3f5e511025e96caa8688da2"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/classes-8a5bc705411a5f6d5a6bea1f790e7e625afbf7ae.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.github.castorflex.smoothprogressbar/library/0.4.0/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="6ca319f998430aa20c4dde97ba6df213d6cf3dd0"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/classes-57e368feac50b8a001a6a84305d53fb0a01c15da.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.github.chrisbanes.actionbarpulltorefresh/library/0.9.9/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="06ca4ea902f14efb76284d918edb085df33cc365"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.0-rc1-9da56907a54bc62b80b021d0066dc3e5625c73ba.jar"
+        jar="/Applications/Android Studio.app/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.0-rc1/support-annotations-21.0.0-rc1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="57c343f05b73b923bf2502b05851dbfe12193dcb"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-06553ed73d0407afd7a833690bb26dd27607e244.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.android.support/support-v13/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="27bbd3982cdfe4468a9bf99c8c773734a9049e33"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.0-rc1-f4d274e269f1212e1b7fca863be53dda174cdf3c.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.0-rc1/libs/internal_impl-21.0.0-rc1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d1a625e8a94bf7c73e0f9d30ad1b483ff6ea64e9"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/commons-io-2.4-a6d5a062e8bc86b4adc2d5c628383046485e2d7d.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/libs/commons-io-2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="b1b6ea3b7e4aa4f492509a4952029cd8e48019ad"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/Parse-1.4.1-c11271bb953a0d9322dd68b8bc14414dc997901b.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/libs/Parse-1.4.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="2b6f88d4ab1161b98431c24bcab65dc84b34100e"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/classes-c252b353de61b6df2f3d09867ff78c081b22efd3.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/5.0.89/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa"/>
+    <item
+        dex="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/pre-dexed/debug/classes-1d87fbe4f8655d5b850279cd4ed88b8bfed9145d.jar"
+        jar="/Users/leonardogedler/Documents/workspace/Tipket/app/build/intermediates/exploded-aar/Tipket.libraries/facebook/unspecified/classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3d5a0c3e58fc1fd7173698fbb095e69e4315a93b"/>
+
+</pre-dex-items>

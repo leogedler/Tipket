@@ -1,0 +1,190 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tipket.app.UserProfile"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="160dp">
+
+        <ImageView
+            android:id="@+id/userProfilePicture"
+            android:layout_height="80dp"
+            android:layout_width="80dp"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:scaleType="fitXY"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userNameView"
+            android:layout_below="@id/userProfilePicture"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:textSize="15dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#61616e"/>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/pointStar"
+            android:layout_below="@id/userNameView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/points"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/userScore"
+            android:layout_alignTop="@id/pointStar"
+            android:layout_toRightOf="@+id/pointStar"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="2dp"
+            android:textSize="14dp"
+            android:textColor="#484848"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/follow_button"
+            android:id="@+id/followButton"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/rightMargin"
+            android:visibility="invisible"
+            android:src="@drawable/button_follow"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/unfollow_button"
+            android:id="@+id/unfollowButton"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/rightMargin"
+            android:visibility="invisible"
+            android:src="@drawable/button_following"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/following_button"
+            android:id="@+id/followingButton"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"
+            android:textColor="#666673"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logOutButton"
+            android:visibility="invisible"
+            android:src="@drawable/button_logout"
+            android:layout_alignTop="@+id/userProfilePicture"
+            android:layout_toLeftOf="@+id/rightMargin" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/button_invite"
+            android:id="@+id/inviteFacebookFriends"
+            android:visibility="invisible"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/logOutButton"
+            android:layout_alignEnd="@+id/logOutButton"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/separatorBar"
+            android:layout_below="@id/pointStar"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#FCB646"
+            android:layout_marginTop="15dp"/>
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rightMargin"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gallerySelected"
+            android:background="@drawable/gallery_selected"
+            android:layout_alignTop="@+id/userScore"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible"/>
+
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listUnSelected"
+            android:background="@drawable/list"
+            android:layout_alignTop="@+id/gallerySelected"
+            android:layout_toLeftOf="@+id/rightMargin"
+            android:longClickable="true"
+            android:layout_marginRight="40dp"
+            android:visibility="visible"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/countOfFollowings"
+            android:layout_above="@+id/followingButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="3dp"
+            android:textColor="#666673"/>
+
+
+
+    </RelativeLayout>
+
+    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gridView1"
+    android:numColumns="3"
+    android:columnWidth="50dp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+
+    </GridView>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -3,8 +3,8 @@
     package="com.tipket.app">
 
     <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="17" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
 
     <uses-feature android:name="android.hardware.camera"
         android:required="true" />
